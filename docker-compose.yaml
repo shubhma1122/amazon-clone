@@ -8,11 +8,4 @@ services:
     image: amazon-clone:latest  # Tag the built image
     ports:
       - "3000:3000"  # Map port 3000 on the host to port 3000 in the container
-    depends_on:
-      - api  # Ensure this service starts after the 'api' service, if defined
   
-  api:
-    image: your-api-image:latest  # Replace with your actual API image
-    ports:
-      - "5000:5000"  # Map port 5000 on the host to port 5000 in the container
-    # Additional configuration for your API service can be added here
