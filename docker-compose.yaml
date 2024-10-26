@@ -2,7 +2,7 @@ version: '3.8'  # Specify the Docker Compose file version
 
 services:
   web:
-    image: shubhamade1122/amazon-clone  # Use the official Node.js image
+    image: amazon-clone:latest  # Use the official Node.js image
     working_dir: /app  # Set the working directory in the container
     volumes:
       - .:/app  # Mount the current directory to /app in the container
