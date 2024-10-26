@@ -1,0 +1,35 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone Code') {
+            steps {
+                git url: "https://github.com/shubhma1122/amazon-clone.git", branch: "main"
+            }
+        }
+        stage('Build') {
+            steps {
+                // Build the Docker image
+                sh "docker build -t amazon-clone:latest ."
+                // sh "docker-compose up -d"
+            }
+        }
+        stage('Image Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                    sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+                    sh 'docker tag amazon-clone:latest $DOCKER_USERNAME/amazon-clone:latest'
+                    sh 'docker push $DOCKER_USERNAME/amazon-clone:latest'
+                }
+            }
+        }
+        stage('Run') {
+            steps {
+                // Use docker-compose to stop and remove any running containers, then start the new containers
+                sh 'docker-compose down || true'  // Ignore errors if no container is running
+                // sh "docker run -d -p 3000:3000 amazon-clone:latest"
+                sh "docker-compose up -d"
+            }
+        }
+    }
+}
