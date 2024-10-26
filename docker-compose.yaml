@@ -1,9 +1,13 @@
 version: '3'
 services:
   web:
-    build: ./amazon-clone/docker-compose.yaml  # Path where the Dockerfile for "web" service is located
-    image: amazon-clone:latest  # Tag the image after building
+    image: amazon-clone:latest  # Pull the existing image from the registry
     ports:
       - "3000:3000"
     depends_on:
       - api
+
+  api:
+    image: api-service:latest  # Specify the image for the API service
+    ports:
+      - "8000:8000"
