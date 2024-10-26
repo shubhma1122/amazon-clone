@@ -1,11 +1,18 @@
-version: '3.8'  # Specify the Docker Compose file version
+version: '3.8'  # Specify the version of Docker Compose
 
 services:
   web:
-    image: shubhamade1122/amazon-clone:latest  # Use the official Node.js image
-    working_dir: /app  # Set the working directory in the container
-    volumes:
-      - .:/app  # Mount the current directory to /app in the container
+    build:
+      context: .  # Build from the current directory
+      dockerfile: Dockerfile  # Specify the Dockerfile if it's not named 'Dockerfile'
+    image: amazon-clone:latest  # Tag the built image
     ports:
-      - "3000:3000"  # Expose port 3000
-    command: ["npm", "start"]  # Command to run when the container starts
+      - "3000:3000"  # Map port 3000 on the host to port 3000 in the container
+    depends_on:
+      - api  # Ensure this service starts after the 'api' service, if defined
+  
+  api:
+    image: your-api-image:latest  # Replace with your actual API image
+    ports:
+      - "5000:5000"  # Map port 5000 on the host to port 5000 in the container
+    # Additional configuration for your API service can be added here
